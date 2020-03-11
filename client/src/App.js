@@ -1,5 +1,6 @@
 import React from 'react';
 import io from 'socket.io-client';
+import { v4 as uuidv4 } from 'uuid';
 
 class App extends React.Component {
   constructor(props) {
@@ -17,16 +18,16 @@ class App extends React.Component {
     this.socket.on('addTask', task => {
       this.addTask(task);
     });
-    this.socket.on('removeTask', index => {
-      this.removeTask(index);
+    this.socket.on('removeTask', id => {
+      this.removeTask(id);
     });
   }
-  removeTask(index, isLocal) {
-    let newList = this.state.tasks;
-    newList.splice(index, 1);
-    this.setState({ tasks: newList });
+  removeTask(id, isLocal) {
+    this.setState({
+      tasks: this.state.tasks.filter(task => task.id !== id)
+    });
     if (isLocal) {
-      this.socket.emit('removeTask', index);
+      this.socket.emit('removeTask', id);
     }
   }
   updateTask(value) {
@@ -34,11 +35,12 @@ class App extends React.Component {
   }
   submitForm(e) {
     e.preventDefault();
-    this.addTask(this.state.taskName);
-    this.socket.emit('addTask', this.state.taskName);
+    const newTask = { name: this.state.taskName, id: uuidv4() };
+    this.addTask(newTask);
+    this.socket.emit('addTask', newTask);
   }
-  addTask(string) {
-    this.setState({ tasks: [...this.state.tasks, string] });
+  addTask(newTask) {
+    this.setState({ tasks: [...this.state.tasks, newTask] });
   }
   updateTasks(taskslist) {
     this.setState({ tasks: taskslist });
@@ -56,11 +58,11 @@ class App extends React.Component {
 
           <ul className='tasks-section__list' id='tasks-list'>
             {tasks.map(task => (
-              <li className='task' key={task}>
-                {task}
+              <li className='task' key={task.id}>
+                {task.name}
                 <button
                   className='btn btn--red'
-                  onClick={e => this.removeTask(tasks.indexOf(task), true)}
+                  onClick={e => this.removeTask(task.id, true)}
                 >
                   Remove
                 </button>

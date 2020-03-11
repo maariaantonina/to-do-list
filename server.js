@@ -28,8 +28,8 @@ io.on('connection', socket => {
     tasks.push(task);
     socket.broadcast.emit('addTask', task);
   });
-  socket.on('removeTask', index => {
-    tasks.splice(index, 1);
-    socket.broadcast.emit('removeTask', index);
+  socket.on('removeTask', id => {
+    tasks.filter(task => task.id !== id);
+    socket.broadcast.emit('removeTask', id);
   });
 });
