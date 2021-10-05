@@ -31,4 +31,10 @@ io.on('connection', (socket) => {
     tasks.filter((task) => task.id !== id);
     socket.broadcast.emit('removeTask', id);
   });
+  socket.on('editTask', (editedTask) => {
+    tasks.map((task) => {
+      task.id === editedTask.id ? (task.name = editedTask.name) : task;
+    });
+    socket.broadcast.emit('editTask', editedTask);
+  });
 });

@@ -22,6 +22,9 @@ class App extends React.Component {
     this.socket.on('removeTask', (id) => {
       this.removeTask(id);
     });
+    this.socket.on('editTask', (task) => {
+      this.editTask(task);
+    });
   }
   removeTask(id, isLocal) {
     this.setState({
@@ -47,15 +50,13 @@ class App extends React.Component {
   updateTasks(taskslist) {
     this.setState({ tasks: taskslist });
   }
-  setEdit(task) {
+  startEdit(task) {
     this.setState({ editedTask: task });
   }
-  editTask(value) {
+  setEditedTask(value) {
     this.setState({ editedTask: { ...this.state.editedTask, name: value } });
   }
-  submitEdit(e) {
-    e.preventDefault();
-    //change state.tasks
+  editTask(task) {
     this.setState({
       tasks: this.state.tasks.map((task) =>
         task.id === this.state.editedTask.id
@@ -63,7 +64,12 @@ class App extends React.Component {
           : task
       ),
     });
+  }
+  submitEdit(e) {
+    e.preventDefault();
+    this.editTask(this.state.editedTask);
     //emit change
+    this.socket.emit('editTask', this.state.editedTask);
     //clear editedTask
     this.setState({ editedTask: {} });
   }
@@ -84,7 +90,7 @@ class App extends React.Component {
                 <div className='buttons'>
                   <button
                     className='btn'
-                    onClick={(e) => this.setEdit(task, true)}
+                    onClick={(e) => this.startEdit(task, true)}
                   >
                     Edit
                   </button>
@@ -106,7 +112,7 @@ class App extends React.Component {
                 type='text'
                 value={this.state.editedTask.name}
                 id='task-name'
-                onChange={(e) => this.editTask(e.target.value)}
+                onChange={(e) => this.setEditedTask(e.target.value)}
               />
               <button
                 className='btn'
