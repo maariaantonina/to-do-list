@@ -86,43 +86,48 @@ class App extends React.Component {
           <ul className='tasks-section__list' id='tasks-list'>
             {tasks.map((task) => (
               <li className='task' key={task.id}>
-                {task.name}
-                <div className='buttons'>
-                  <button
-                    className='btn'
-                    onClick={(e) => this.startEdit(task, true)}
-                  >
-                    Edit
-                  </button>
-                  <button
-                    className='btn btn--red'
-                    onClick={(e) => this.removeTask(task.id, true)}
-                  >
-                    Remove
-                  </button>
+                <div className='task-main'>
+                  {task.name}
+                  <div className='buttons'>
+                    <button
+                      className='btn btn--yellow'
+                      onClick={(e) => this.startEdit(task, true)}
+                    >
+                      Edit
+                    </button>
+                    <button
+                      className='btn btn--red'
+                      onClick={(e) => this.removeTask(task.id, true)}
+                    >
+                      Remove
+                    </button>
+                  </div>
+                </div>
+                <div className='task-edit'>
+                  {task.id === editedTask.id && (
+                    <form id='edit-task-form'>
+                      <input
+                        className='text-input input-edit'
+                        autoComplete='off'
+                        type='text'
+                        value={this.state.editedTask.name}
+                        id='task-name'
+                        onChange={(e) => this.setEditedTask(e.target.value)}
+                      />
+                      <button
+                        className='btn btn--yellow'
+                        type='submit'
+                        onClick={(e) => this.submitEdit(e)}
+                      >
+                        Change
+                      </button>
+                    </form>
+                  )}
                 </div>
               </li>
             ))}
           </ul>
-          {Object.keys(editedTask).length !== 0 && (
-            <form id='edit-task-form'>
-              <input
-                className='text-input'
-                autoComplete='off'
-                type='text'
-                value={this.state.editedTask.name}
-                id='task-name'
-                onChange={(e) => this.setEditedTask(e.target.value)}
-              />
-              <button
-                className='btn'
-                type='submit'
-                onClick={(e) => this.submitEdit(e)}
-              >
-                Change
-              </button>
-            </form>
-          )}
+
           <form id='add-task-form'>
             <input
               className='text-input'

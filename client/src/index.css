@@ -57,6 +57,11 @@ p {
   background: #e74c3c;
 }
 
+.btn--yellow {
+  background: #e7dc3c;
+  color: #000;
+}
+
 .text-input {
   background: none;
   border: none;
@@ -67,6 +72,10 @@ p {
   outline: none;
   opacity: 0.6;
   transition: 0.3s;
+}
+
+.input-edit {
+  border-bottom: 2px solid #e7dc3c;
 }
 
 .text-input:focus {
@@ -86,7 +95,15 @@ p {
 
 .task {
   display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 400px;
+}
+
+.task-main {
+  display: flex;
   justify-content: space-between;
   align-items: center;
   border-bottom: 1px dashed rgb(83, 83, 83);
+  min-width: 400px;
 }
