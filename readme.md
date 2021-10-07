@@ -1,6 +1,6 @@
 # to-do-list app
 
-**Simple to-do list app created with React.js, Socket.io and Express.js.**
+**Simple to-do list app created with React.js, Socket.io and Express.js. See the [DEMO](https://peaceful-ocean-31059.herokuapp.com/)**
 
 ## Table of Contents
 
@@ -50,4 +50,4 @@ The build is minified and the filenames include the hashes.
 
 ## Status
 
-I am going to deploy app on Heroku.
+There are some problems with placeholders. To be resolved.
