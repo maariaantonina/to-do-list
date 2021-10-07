@@ -8,13 +8,13 @@ const app = express();
 const tasks = [];
 
 app.use(cors());
-app.use(express.static(path.join(__dirname, '/client')));
+app.use(express.static(path.join(__dirname, '/client/build')));
 
-// app.get('/', (req, res) => {
-//   res.sendFile(path.join(__dirname + '/client/index.html'));
-// });
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname + '/client/build/index.html'));
+});
 
-const server = app.listen(8000, () => {
+const server = app.listen(process.env.PORT || 8000, () => {
   console.log('Server is running on port: 8000');
 });
 
@@ -25,7 +25,6 @@ io.on('connection', (socket) => {
   socket.on('addTask', (task) => {
     tasks.push(task);
     socket.broadcast.emit('addTask', task);
-    console.log(tasks);
   });
   socket.on('removeTask', (id) => {
     tasks.filter((task) => task.id !== id);
